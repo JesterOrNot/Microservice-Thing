@@ -1,0 +1,7 @@
+version: "3"
+services:
+  product-api:
+    restart: on-failure
+    build: product-api
+    ports:
+      - "8000:8000"
