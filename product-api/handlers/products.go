@@ -2,8 +2,9 @@ package handlers
 
 import (
 	"log"
-	"net/http"
+	"fmt"
 	"encoding/json"
+	"net/http"
 
 	"product-api/data"
 )
@@ -18,10 +19,30 @@ func NewProducts(logger *log.Logger) *Products {
 }
 
 func (handler *Products) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
-	products := data.GetProducts()
-	json, err := json.Marshal(products)
-	if err != nil {
-		http.Error(rw, "Unable to encode JSON", http.StatusInternalServerError)
+	switch r.Method {
+	case "GET":
+		getProducts(rw, r)
+	case "PUT":
+		putProducts(rw, r)
+	default:
+		rw.WriteHeader(http.StatusMethodNotAllowed)
 	}
-	rw.Write(json)
+}
+
+func getProducts(rw http.ResponseWriter, r *http.Request) {
+	products := data.GetProducts()
+	err := products.ToJSON(rw)
+	if err != nil {
+		rw.WriteHeader(http.StatusInternalServerError)
+	}
+}
+
+func putProducts(rw http.ResponseWriter, r *http.Request) {
+	var product data.Product
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&product)
+	if err != nil {
+		rw.WriteHeader(http.StatusInternalServerError)
+	}
+	data.PutProducts(product)
 }
