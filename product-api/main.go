@@ -1,22 +1,23 @@
 package main
 
 import (
-	"log"
 	"fmt"
-	"io/ioutil"
-  "net/http"
+	"log"
+	"net/http"
+	"os"
+	handlers "product-api/handlers"
 )
 
 func main() {
-  http.HandleFunc("/greet", func(rw http.ResponseWriter, req *http.Request) {
-    data, err := ioutil.ReadAll(req.Body)
-    if err != nil {
-      fmt.Println("Error: \033[1;31mRead error\033[m")
-      rw.WriteHeader(http.StatusBadRequest)
-    }
-    log.Println(req.Method, req.RequestURI)
-    fmt.Fprintf(rw, "Hello %s", data)
-  })
-  fmt.Println("Server listening on Port 8000")
-  http.ListenAndServe(":8000", nil)
+	logger := log.New(os.Stdout, "product-api: ", log.LstdFlags)
+	
+	hh := handlers.NewHello(logger)
+	gh := handlers.NewGoodbye(logger)
+
+	sm := http.NewServeMux()
+	sm.Handle("/hello", hh)
+	sm.Handle("/goodbye", gh)
+
+	fmt.Println("Server listening on Port 8000")
+	http.ListenAndServe(":8000", sm)
 }
