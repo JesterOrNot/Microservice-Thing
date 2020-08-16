@@ -13,13 +13,9 @@ import (
 func main() {
 	logger := log.New(os.Stdout, "product-api: ", log.LstdFlags)
 
-	hh := handlers.NewHello(logger)
-	gh := handlers.NewGoodbye(logger)
 	ph := handlers.NewProducts(logger)
 
 	sm := http.NewServeMux()
-	sm.Handle("/hello", hh)
-	sm.Handle("/goodbye", gh)
 	sm.Handle("/api/products", ph)
 
 	// Timeouts are used to prevent DOS (denial of service) attacks
@@ -43,7 +39,7 @@ func main() {
 	signal.Notify(channel, os.Interrupt)
 	signal.Notify(channel, os.Kill)
 	sig := <-channel
-	logger.Println("Recieved Graceful shutdown", sig)
+	logger.Println("Received Graceful shutdown", sig)
 
 	// Allow graceful shutdown
 	tc, _ := context.WithTimeout(context.Background(), 30*time.Second)
