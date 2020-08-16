@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"log"
-	"fmt"
 	"encoding/json"
+	"fmt"
+	"log"
 	"net/http"
 
 	"product-api/data"

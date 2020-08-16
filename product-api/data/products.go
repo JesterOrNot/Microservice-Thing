@@ -1,9 +1,9 @@
 package data
 
 import (
-	"time"
 	"encoding/json"
 	"io"
+	"time"
 )
 
 // Product The Product Serialization
