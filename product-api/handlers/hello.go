@@ -19,7 +19,7 @@ func NewHello(logger *log.Logger) *Hello {
 
 func (handler *Hello) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	handler.logger.Println("Hello World From the Hello Handler!")
-	data, err := ioutil.ReadAll(r.Body) 
+	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		http.Error(rw, "Oops!", http.StatusBadRequest)
 	}

@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
-	"io/ioutil"
 )
 
 // Goodbye The Goodbye handler
