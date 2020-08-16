@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -16,10 +15,12 @@ func main() {
 
 	hh := handlers.NewHello(logger)
 	gh := handlers.NewGoodbye(logger)
+	ph := handlers.NewProducts(logger)
 
 	sm := http.NewServeMux()
 	sm.Handle("/hello", hh)
 	sm.Handle("/goodbye", gh)
+	sm.Handle("/api/products", ph)
 
 	// Timeouts are used to prevent DOS (denial of service) attacks
 	s := &http.Server{
@@ -30,7 +31,7 @@ func main() {
 		WriteTimeout: 1 * time.Second,
 	}
 
-	fmt.Println("Server listening on Port 8000")
+	logger.Println("Server listening on Port 8000")
 	go func() {
 		err := s.ListenAndServe()
 		if err != nil {
